@@ -2,7 +2,7 @@
 # from crypt import methods
 
 from ast import Pass
-from asyncio.windows_events import NULL
+
 from telnetlib import LOGOUT
 from django.views.decorators.csrf import csrf_exempt
 from django.http import HttpResponse, HttpResponseRedirect
