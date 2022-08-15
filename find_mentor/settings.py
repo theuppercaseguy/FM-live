@@ -29,7 +29,7 @@ SECRET_KEY = 'django-insecure-ovvycq09ow8!goyc_gzgv*x*w2)0s@a+kb_no25bpqz97c*%#w
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = ['https://findmentors.herokuapp.com',"localhost",]
+ALLOWED_HOSTS = ['*']
 
 MEDIA_URL='/images/'
 
@@ -147,3 +147,9 @@ LOGOUT_REDIRECT_URL="/main_web/home"
 STATIC_ROOT = os.path.join(BASE_DIR,'staticfiles')
 
 django_heroku.settings(locals())
+
+
+STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
+
+STATICFILES_STORAGE = "whitenoise.storage.CompressedStaticFilesStorage"
+
