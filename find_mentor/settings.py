@@ -27,7 +27,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-ovvycq09ow8!goyc_gzgv*x*w2)0s@a+kb_no25bpqz97c*%#w'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ['https://findmentors.herokuapp.com',"localhost",]
 
