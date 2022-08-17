@@ -22,7 +22,7 @@ class Gikians(models.Model):
   
    username=models.CharField(max_length=50,unique=True,null=False)
 
-   hash = models.CharField(max_length=200,unique=True)
+   hash = models.CharField(max_length=200)
    
    email=models.EmailField(unique=True)
    
@@ -36,6 +36,9 @@ class Gikians(models.Model):
 
    def __int__(self):
        return self.reg_no
+
+   def __str__(self) :
+      return f"{self.reg_no} : {self.username}"
 
 class Giki_socities(models.Model):
    

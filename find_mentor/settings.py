@@ -27,7 +27,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-ovvycq09ow8!goyc_gzgv*x*w2)0s@a+kb_no25bpqz97c*%#w'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ['*']
 
@@ -86,8 +86,12 @@ WSGI_APPLICATION = 'find_mentor.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+          'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME':'FYAM_2.0',
+        'USER' : 'postgres',
+        'PASSWORD':'postgres',
+        'HOST' : 'localhost',
+        'PORT': '5432',
         
     }
 }

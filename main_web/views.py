@@ -1,20 +1,17 @@
 
-# from crypt import methods
-
-from ast import Pass
-
 from telnetlib import LOGOUT
 from django.views.decorators.csrf import csrf_exempt
-from django.http import HttpResponse, HttpResponseRedirect
+from django.http import HttpResponseRedirect
 from django.shortcuts import render,redirect
 
 from django.urls import reverse
-from django.http.response import JsonResponse
+# from django.http.response import JsonResponse
+# from .models import Gikians
 from .models import Gikians
-from django.db import models,connection
+from django.db import connection
 from django.db.models import Q
 from .import models
-from .forms import Newtaskform, Signupform, best_courses_form
+from .forms import Newtaskform, Signupform
 from django.contrib.auth import login, authenticate,logout 
 from django.contrib import  messages 
 
@@ -86,33 +83,31 @@ def signup(request):
       form = Signupform(request.POST)
       
       if form.is_valid():
+      
 ##################################################
          messages.success(request,"Account Created.")
+         
          cursor = connection.cursor()
-        
          try:
             cursor.execute("insert into main_web_gikians(reg_no,username,email,name,year,faculty,role,uni_id_id) values(%s,%s,%s,%s,%s,%s,%s,%s)",
             (form.data['reg_no'],form.data['username'],form.data['email'],
-            form.data['first_name'] + form.data['last_name'],form.data['year'],form.data['faculty'],'mentor',1,))
-
+            form.data['first_name'] + form.data['last_name'],form.data['year'],form.data['faculty'],form.data['apl_for'],1,))
+         
             connection.commit()
                   
          except Exception as e:
-            cursor.close
+            cursor.close()
+
 
          form.save()
 
-
          return redirect("/main_web/signin")
 
-
       else:
-         print('account not created')
-         messages.success(request,"Account not Created.")
+         print(f"Account not Created.{ str(form.errors.as_text)}")
+         messages.success(request,f"Account not Created.{ str(form.errors.items)}" )
         
          return redirect("/main_web/signup")
-   
-
 
    else:
       form=Signupform()
@@ -145,14 +140,9 @@ def signin(request):
       })
 
 def signout(request):
-   if request.method=="POST":
-      a=logout(request)
-      print(a)
-      # return redirect('/main_web/home')
-      return redirect("mentor_links:home")
-   else:
-      return render(request,"main_web/home.html")
-
+   logout(request)
+   return redirect("mentor_links:home")
+      
 
 def dashboard(request):
    c1 = connection.cursor()
@@ -166,14 +156,11 @@ def dashboard(request):
    c9 = connection.cursor()
    c10 = connection.cursor()
    c11 = connection.cursor()
+   c12 = connection.cursor()
    c13 = connection.cursor()
    c14 = connection.cursor()
    c15 = connection.cursor()
    c16 = connection.cursor()
-   c17 = connection.cursor()
-   c18 = connection.cursor()
-   c19 = connection.cursor()
-   c20 = connection.cursor()
    
    try:
       c1.execute('select * from main_web_gikians', ['localhost'])
@@ -231,6 +218,8 @@ def dashboard(request):
        }
 
 
+   user = request.user.username
+
    if request.user.is_superuser:
 
       print(f'{request.user.is_superuser} is super user')
@@ -239,22 +228,20 @@ def dashboard(request):
 
    elif not request.user.is_superuser:
 
-      c12 = connection.cursor()
-      user = request.user.username
-      
-      
       try:
          c12.execute("select role from main_web_gikians where username = %s",(user,))
+         print(user)
          row1 = c12.fetchone()
-
-         print(f'role is: {row1}')
+         
+         print(f'role is:{row1}')
+         connection.commit()
          
       except Exception as e:
-         c12.close
+         c12.close()
          print(f'exception is: {e}')
-
-      if row1[0] == 'mentor':
-
+      
+      if str.lower(row1[0]) == 'mentor':
+         print("now")
 ##################################################
          if request.method=="POST":
             
@@ -306,7 +293,7 @@ def dashboard(request):
 
 
 
-               c14.execute('select main_web_gikians.reg_no from main_web_gikians where username = %s ',(request.user.username,))
+               c14.execute('select main_web_gikians.reg_no from main_web_gikians where username = %s ',(request.user.username))
                
                reg_no = c14.fetchall() #reg_no
                
@@ -355,7 +342,7 @@ def dashboard(request):
                connection.commit()
           
             except Exception as e:
-               c12.close()
+               
                c13.close()
                c14.close()
                c15.close()
@@ -377,10 +364,7 @@ def dashboard(request):
 
 
 
-      elif row1[0] == 'mentee':
-         
-         
-
+      elif str.lower(row1[0]) == 'mentee':
          
          if request.method=="POST":
             
@@ -476,7 +460,6 @@ def dashboard(request):
                connection.commit()
           
             except Exception as e:
-               c12.close()
                c13.close()
                c14.close()
                c15.close()
@@ -497,8 +480,8 @@ def dashboard(request):
 
 
          
-   else:
-      return render(request,'main_web/home.html')
+      else:
+         return render(request,'main_web/home.html')
 
 
 def unis(request):
