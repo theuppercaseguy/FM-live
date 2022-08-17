@@ -10,6 +10,7 @@ urlpatterns = [
    # path("home_api",views.home_api,name="index"),
    # path("",views.home,name="home"),
    
+   path("",views.home,name="home"),
    path("home",views.home,name="home"),
    path("signup",views.signup,name="signup"),
    path("signin",views.signin,name="signin"),

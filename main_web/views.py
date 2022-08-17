@@ -1,17 +1,7 @@
 
-from telnetlib import LOGOUT
-from django.views.decorators.csrf import csrf_exempt
-from django.http import HttpResponseRedirect
 from django.shortcuts import render,redirect
-
-from django.urls import reverse
-# from django.http.response import JsonResponse
-# from .models import Gikians
-from .models import Gikians
 from django.db import connection
-from django.db.models import Q
-from .import models
-from .forms import Newtaskform, Signupform
+from .forms import Signupform
 from django.contrib.auth import login, authenticate,logout 
 from django.contrib import  messages 
 
@@ -19,57 +9,6 @@ from django.contrib import  messages
 
 
 #     Create your views here.
-def task(request):
-   
-   cursor = connection.cursor()
-   try:
-      cursor.execute('select * from main_web_gikians', ['localhost'])
-      row = cursor.fetchall() 
-   except Exception as e:
-      cursor.close
-   
-   if "tasks" not in request.session:
-      request.session["tasks"] =[]
-
-   #doing server side validation
-   if request.method == "POST":
-      form = Newtaskform(request.POST)
-      if form.is_valid(): 
-         new_task = form.cleaned_data["task"]
-         #tasks.append(new_task)
-         request.session["tasks"] += [new_task]
-         return HttpResponseRedirect(reverse("mentor_links:tasks"))
-      else:
-         return render (request,"main_web/tasks.html",{
-            "old_form":form,
-            #"tasks":tasks
-         })
-
-
-   return render(request,"main_web/uni.html",{
-      "k":["khan","saad","lol"],
-      #"tasks":tasks,
-      "forms_by_django":Newtaskform(),
-      "tasks":request.session["tasks"],
-      'users':row,
-   })
-
-
-def index(request):
-   if "tasks" not in request.session:
-      request.session["tasks"] =[]
-
-   #return HttpResponse("hello, world")
-   return render(request, "main_web/index.html",{
-      
-      "tasks":request.session["tasks"],
-   })
-
-def greet(request,name):
-   #return HttpResponse(f"hello, {name.capitalize()} ")
-   return render(request,"main_web/layout.html",{
-   "name":name.capitalize() ,
-   })
 
 def home(request):
    return render(request, "main_web/home.html")
@@ -101,13 +40,13 @@ def signup(request):
 
          form.save()
 
-         return redirect("/main_web/signin")
+         return redirect("/signin")
 
       else:
          print(f"Account not Created.{ str(form.errors.as_text)}")
          messages.success(request,f"Account not Created.{ str(form.errors.items)}" )
         
-         return redirect("/main_web/signup")
+         return redirect("/signup")
 
    else:
       form=Signupform()
@@ -127,7 +66,7 @@ def signin(request):
       if user is not None:
          login(request, user)
          
-         return redirect('/main_web/home')
+         return redirect('/home')
          
       else:
          messages.success(request,"The UserName or Password was Incorrect.")
@@ -465,9 +404,6 @@ def dashboard(request):
                c15.close()
                c16.close()
 
-            print('mentee 1 login')            
-
-            # return redirect("/main_web/dashboard_user",{"mentee":row13,})
             return render(request,'main_web/user_dashboard_mentee.html',{"username":request.user.username,
               "mentee":row13,
              })
