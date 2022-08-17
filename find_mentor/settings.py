@@ -86,11 +86,11 @@ WSGI_APPLICATION = 'find_mentor.wsgi.application'
 
 DATABASES = {
     'default': {
-          'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME':'FYAM_2.0',
-        'USER' : 'postgres',
-        'PASSWORD':'postgres',
-        'HOST' : 'localhost',
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME':'d638ir61kpu5sd',
+        'USER' : 'knzoxjzjefexgq',
+        'PASSWORD':'5519d5259a02f0f1be17e1da5d397ae20b2e461f4fcf1d3fc90277ab0709cf0b',
+        'HOST' : 'ec2-107-22-122-106.compute-1.amazonaws.com',
         'PORT': '5432',
         
     }
